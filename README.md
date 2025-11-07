@@ -1,3 +1,5 @@
+[![Discord](https://img.shields.io/badge/Discord-Join%20Us-7289DA?logo=discord&logoColor=white)](https://discord.gg/MaqTgPF3Ch)
+
 # libhtml
 
 > A simple Go library to write HTML in plain Go
