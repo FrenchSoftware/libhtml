@@ -30,3 +30,13 @@ go.work.sum
 # Editor/IDE
 # .idea/
 # .vscode/
+
+# Development/scratch files
+CLAUDE.md
+helpers.txt
+fetch-html5-spec.sh
+nodes.json
+attributes.json
+
+# Compiled example binary
+example/example
