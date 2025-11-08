@@ -177,3 +177,48 @@ func TestDocumentEmpty(t *testing.T) {
 		t.Errorf("Expected html tag, got: %s", htmlStr)
 	}
 }
+
+func TestRaw(t *testing.T) {
+	// Test basic raw HTML
+	rawHTML := "<strong>Bold Text</strong>"
+	node := html.Div(
+		html.Raw(rawHTML),
+	)
+	htmlStr := html.String(node)
+
+	if !strings.Contains(htmlStr, rawHTML) {
+		t.Errorf("Expected raw HTML to be preserved, got: %s", htmlStr)
+	}
+	if !strings.Contains(htmlStr, "<strong>Bold Text</strong>") {
+		t.Errorf("Expected raw HTML tags, got: %s", htmlStr)
+	}
+
+	// Test raw HTML with multiple elements
+	complexRaw := "<p>First</p><p>Second</p>"
+	node2 := html.Div(
+		html.Raw(complexRaw),
+	)
+	htmlStr2 := html.String(node2)
+
+	if !strings.Contains(htmlStr2, "<p>First</p><p>Second</p>") {
+		t.Errorf("Expected complex raw HTML to be preserved, got: %s", htmlStr2)
+	}
+
+	// Test raw HTML mixed with regular nodes
+	mixed := html.Div(
+		html.P(html.Text("Regular text")),
+		html.Raw("<span>Raw HTML</span>"),
+		html.P(html.Text("More text")),
+	)
+	htmlStr3 := html.String(mixed)
+
+	if !strings.Contains(htmlStr3, "Regular text") {
+		t.Errorf("Expected regular text, got: %s", htmlStr3)
+	}
+	if !strings.Contains(htmlStr3, "<span>Raw HTML</span>") {
+		t.Errorf("Expected raw HTML span, got: %s", htmlStr3)
+	}
+	if !strings.Contains(htmlStr3, "More text") {
+		t.Errorf("Expected more text, got: %s", htmlStr3)
+	}
+}

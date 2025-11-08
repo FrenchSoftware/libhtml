@@ -32,6 +32,11 @@ type textNode struct {
 	content string
 }
 
+// rawNode represents a raw HTML node that outputs content without escaping.
+type rawNode struct {
+	content string
+}
+
 // groupNode represents a group of nodes without a wrapper element.
 type groupNode struct {
 	children []Node
@@ -47,9 +52,21 @@ func Text(content string) Node {
 	return &textNode{content: content}
 }
 
+// Raw creates a raw HTML node that outputs content without escaping.
+// WARNING: Only use this with trusted content to avoid XSS vulnerabilities.
+func Raw(content string) Node {
+	return &rawNode{content: content}
+}
+
 // Output writes the text content to the writer.
 func (t *textNode) Output(w io.Writer) error {
 	_, err := w.Write([]byte(t.content))
+	return err
+}
+
+// Output writes the raw HTML content to the writer without escaping.
+func (r *rawNode) Output(w io.Writer) error {
+	_, err := w.Write([]byte(r.content))
 	return err
 }
 
