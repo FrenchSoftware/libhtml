@@ -38,8 +38,8 @@ func TestCompleteHTMLRendering(t *testing.T) {
 	)
 
 	var buf strings.Builder
-	if err := doc.Output(&buf); err != nil {
-		t.Fatalf("Output failed: %v", err)
+	if err := doc.Render(&buf); err != nil {
+		t.Fatalf("Render failed: %v", err)
 	}
 
 	htmlStr := buf.String()

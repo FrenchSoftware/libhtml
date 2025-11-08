@@ -4,7 +4,7 @@ import "io"
 
 // Node represents an HTML element or text node.
 type Node interface {
-	Output(w io.Writer) error
+	Render(w io.Writer) error
 }
 
 // Attribute represents an HTML attribute.
@@ -58,34 +58,34 @@ func Raw(content string) Node {
 	return &rawNode{content: content}
 }
 
-// Output writes the text content to the writer.
-func (t *textNode) Output(w io.Writer) error {
+// Render writes the text content to the writer.
+func (t *textNode) Render(w io.Writer) error {
 	_, err := w.Write([]byte(t.content))
 	return err
 }
 
-// Output writes the raw HTML content to the writer without escaping.
-func (r *rawNode) Output(w io.Writer) error {
+// Render writes the raw HTML content to the writer without escaping.
+func (r *rawNode) Render(w io.Writer) error {
 	_, err := w.Write([]byte(r.content))
 	return err
 }
 
-// Output writes the group's children to the writer.
-func (g *groupNode) Output(w io.Writer) error {
+// Render writes the group's children to the writer.
+func (g *groupNode) Render(w io.Writer) error {
 	for _, child := range g.children {
-		if err := child.Output(w); err != nil {
+		if err := child.Render(w); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-// Output writes the DOCTYPE declaration followed by the HTML element.
-func (d *documentNode) Output(w io.Writer) error {
+// Render writes the DOCTYPE declaration followed by the HTML element.
+func (d *documentNode) Render(w io.Writer) error {
 	if _, err := w.Write([]byte("<!DOCTYPE html>")); err != nil {
 		return err
 	}
-	return d.htmlElement.Output(w)
+	return d.htmlElement.Render(w)
 }
 
 // Key returns the attribute's key.
@@ -98,8 +98,8 @@ func (a *attribute) Value() string {
 	return a.value
 }
 
-// Output writes the element to the writer.
-func (e *element) Output(w io.Writer) error {
+// Render writes the element to the writer.
+func (e *element) Render(w io.Writer) error {
 	// Opening tag
 	if _, err := w.Write([]byte("<" + e.tag)); err != nil {
 		return err
@@ -123,7 +123,7 @@ func (e *element) Output(w io.Writer) error {
 
 	// Children
 	for _, child := range e.children {
-		if err := child.Output(w); err != nil {
+		if err := child.Render(w); err != nil {
 			return err
 		}
 	}
