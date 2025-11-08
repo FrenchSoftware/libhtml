@@ -117,6 +117,22 @@ func Class(value string) html.Attribute {
 	return html.Attr("class", value)
 }
 
+// ClassIf sets the class attribute on an element, if cond is true.
+func ClassIf(cond bool, ifValue string) html.Attribute {
+	if cond {
+		return html.Attr("class", ifValue)
+	}
+	return nil
+}
+
+// ClassIfElse sets the class attribute depending on the value of cond.
+func ClassIfElse(cond bool, ifValue, elseValue string) html.Attribute {
+	if cond {
+		return html.Attr("class", ifValue)
+	}
+	return html.Attr("class", elseValue)
+}
+
 // Color sets the color attribute on an element.
 func Color(value string) html.Attribute {
 	return html.Attr("color", value)
