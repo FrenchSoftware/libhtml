@@ -560,3 +560,17 @@ func Wbr(items ...any) Node {
 	return Element("wbr", true, items...)
 }
 
+// Document creates a complete HTML document with DOCTYPE declaration.
+// It expects an <html> element as its child.
+func Document(htmlElement ...Node) Node {
+	var element Node
+	if len(htmlElement) > 0 {
+		element = htmlElement[0]
+	} else {
+		element = Html()
+	}
+	return &documentNode{
+		htmlElement: element,
+	}
+}
+

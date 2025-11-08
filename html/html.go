@@ -37,6 +37,11 @@ type groupNode struct {
 	children []Node
 }
 
+// documentNode represents a complete HTML document with DOCTYPE.
+type documentNode struct {
+	htmlElement Node
+}
+
 // Text creates a text node with the given content.
 func Text(content string) Node {
 	return &textNode{content: content}
@@ -56,6 +61,14 @@ func (g *groupNode) Output(w io.Writer) error {
 		}
 	}
 	return nil
+}
+
+// Output writes the DOCTYPE declaration followed by the HTML element.
+func (d *documentNode) Output(w io.Writer) error {
+	if _, err := w.Write([]byte("<!DOCTYPE html>")); err != nil {
+		return err
+	}
+	return d.htmlElement.Output(w)
 }
 
 // Key returns the attribute's key.

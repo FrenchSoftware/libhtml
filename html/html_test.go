@@ -124,3 +124,56 @@ func TestStringConvenience(t *testing.T) {
 		t.Errorf("String() failed: %s", htmlStr)
 	}
 }
+
+func TestDocument(t *testing.T) {
+	doc := html.Document(
+		html.Html(
+			attr.Lang("en"),
+			html.Head(
+				html.Title(html.Text("Test Page")),
+				html.Meta(attr.Charset("utf-8")),
+			),
+			html.Body(
+				html.H1(html.Text("Hello, World!")),
+			),
+		),
+	)
+
+	htmlStr := html.String(doc)
+
+	// Check for DOCTYPE
+	if !strings.HasPrefix(htmlStr, "<!DOCTYPE html>") {
+		t.Errorf("Expected DOCTYPE declaration at the start, got: %s", htmlStr)
+	}
+
+	// Check for html tag with lang attribute
+	if !strings.Contains(htmlStr, `<html lang="en">`) {
+		t.Errorf("Expected html tag with lang attribute, got: %s", htmlStr)
+	}
+
+	// Check for head and body elements
+	if !strings.Contains(htmlStr, "<head>") {
+		t.Errorf("Expected head element, got: %s", htmlStr)
+	}
+	if !strings.Contains(htmlStr, "<body>") {
+		t.Errorf("Expected body element, got: %s", htmlStr)
+	}
+
+	// Check for content
+	if !strings.Contains(htmlStr, "Hello, World!") {
+		t.Errorf("Expected 'Hello, World!' text, got: %s", htmlStr)
+	}
+}
+
+func TestDocumentEmpty(t *testing.T) {
+	doc := html.Document()
+	htmlStr := html.String(doc)
+
+	// Check for DOCTYPE and empty html tag
+	if !strings.HasPrefix(htmlStr, "<!DOCTYPE html>") {
+		t.Errorf("Expected DOCTYPE declaration at the start, got: %s", htmlStr)
+	}
+	if !strings.Contains(htmlStr, "<html>") {
+		t.Errorf("Expected html tag, got: %s", htmlStr)
+	}
+}
